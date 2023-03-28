@@ -1,0 +1,121 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: rgb(13, 94, 13);
+}
+
+
+// Overall Calculator
+.calc {
+    &__div {
+        display: flex;
+        width: 50%;
+        margin: 25% auto;
+        justify-content: start;
+        align-items: start;
+        flex-direction: column;
+        background-color: rgb(255, 154, 87);
+        border: 4px solid rgb(155, 106, 69);
+        border-radius: 5px;
+    }
+}
+
+
+
+
+// *** Displays ***
+
+// Calc displays
+.calc {
+    &__displays-div {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        padding: 1rem 1rem 1rem .5rem;
+        justify-content: end;
+        background-color: rgb(255, 209, 183);
+        column-gap: .5rem;
+    }
+    &__display-input, &__display-total {
+        font-size: 28px;
+    }
+    &__display-total{
+    }
+}
+
+// *** Inputs ***
+
+// General inputs layout
+.calc {
+    &__inputs {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        width: 100%;
+        padding: .5rem;
+    }
+    &__btn {
+        width: 80px;
+        height: 80px;
+        font-size: 30px;
+    }
+}
+
+// Calc Operators
+.calc {
+    &__operators-div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    &__btn--op {
+        flex-grow: 1;
+        flex-basis: 21%;
+    }
+    &__inputs {}
+    &__add {}
+    &__subtract {}
+    &__multiply {}
+    &__divide {}
+}
+
+
+// Calc numbers
+.calc {
+    &__numbers-div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    &__btn--num {
+        flex-grow: 1;
+        flex-basis: 26%;
+        flex-shrink: 1;
+    }
+    &__1 {}
+    &__2 {}
+    &__3 {}
+    &__4 {}
+    &__5 {}
+    &__6 {}
+    &__7 {}
+    &__8 {}
+    &__9 {}
+    &__0 {}
+}
+
+// Calc calculate
+.calc {
+    &__calculate-div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    &__btn--cal {
+        flex-grow: 1;
+        flex-basis: 26%;
+        flex-shrink: 1;
+    }
+    &__delete {}
+    &__clearAll {}
+    &__total {}
+}

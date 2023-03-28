@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: rgb(13, 94, 13);
+}
+
+.calc__div {
+  display: flex;
+  width: 50%;
+  margin: 25% auto;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+  background-color: rgb(255, 154, 87);
+  border: 4px solid rgb(155, 106, 69);
+  border-radius: 5px;
+}
+
+.calc__displays-div {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding: 1rem 1rem 1rem 0.5rem;
+  justify-content: end;
+  background-color: rgb(255, 209, 183);
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
+}
+.calc__display-input, .calc__display-total {
+  font-size: 28px;
+}
+.calc__inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+}
+.calc__btn {
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+}
+
+.calc__operators-div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.calc__btn--op {
+  flex-grow: 1;
+  flex-basis: 21%;
+}
+.calc__numbers-div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.calc__btn--num {
+  flex-grow: 1;
+  flex-basis: 26%;
+  flex-shrink: 1;
+}
+.calc__calculate-div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.calc__btn--cal {
+  flex-grow: 1;
+  flex-basis: 26%;
+  flex-shrink: 1;
+}/*# sourceMappingURL=style.css.map */
