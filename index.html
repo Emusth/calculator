@@ -15,31 +15,82 @@
       </div>
       <div class="calc__inputs">
         <div class="calc__operators-div">
-          <button class="calc__btn calc__btn--op calc__add">&plus;</button>
-          <button class="calc__btn calc__btn--op calc__subtract">
+          <button data-calcid="add" class="calc__btn calc__btn--op calc__add">
+            &plus;
+          </button>
+          <button
+            data-calcid="subtract"
+            class="calc__btn calc__btn--op calc__subtract"
+          >
             &minus;
           </button>
-          <button class="calc__btn calc__btn--op calc__multiply">
+          <button
+            data-calcid="multiply"
+            class="calc__btn calc__btn--op calc__multiply"
+          >
             &times;
           </button>
-          <button class="calc__btn calc__btn--op calc__divide">&divide;</button>
+          <button
+            data-calcid="divide"
+            class="calc__btn calc__btn--op calc__divide"
+          >
+            &divide;
+          </button>
         </div>
         <div class="calc__numbers-div">
-          <button class="calc__btn calc__btn--num calc__1">1</button>
-          <button class="calc__btn calc__btn--num calc__2">2</button>
-          <button class="calc__btn calc__btn--num calc__3">3</button>
-          <button class="calc__btn calc__btn--num calc__4">4</button>
-          <button class="calc__btn calc__btn--num calc__5">5</button>
-          <button class="calc__btn calc__btn--num calc__6">6</button>
-          <button class="calc__btn calc__btn--num calc__7">7</button>
-          <button class="calc__btn calc__btn--num calc__8">8</button>
-          <button class="calc__btn calc__btn--num calc__9">9</button>
-          <button class="calc__btn calc__btn--num calc__0">0</button>
+          <button data-calcid="1" class="calc__btn calc__btn--num calc__1">
+            1
+          </button>
+          <button data-calcid="2" class="calc__btn calc__btn--num calc__2">
+            2
+          </button>
+          <button data-calcid="3" class="calc__btn calc__btn--num calc__3">
+            3
+          </button>
+          <button data-calcid="4" class="calc__btn calc__btn--num calc__4">
+            4
+          </button>
+          <button data-calcid="5" class="calc__btn calc__btn--num calc__5">
+            5
+          </button>
+          <button data-calcid="6" class="calc__btn calc__btn--num calc__6">
+            6
+          </button>
+          <button data-calcid="7" class="calc__btn calc__btn--num calc__7">
+            7
+          </button>
+          <button data-calcid="8" class="calc__btn calc__btn--num calc__8">
+            8
+          </button>
+          <button data-calcid="9" class="calc__btn calc__btn--num calc__9">
+            9
+          </button>
+          <button data-calcid="0" class="calc__btn calc__btn--num calc__0">
+            0
+          </button>
+          <button data-calcid="." class="calc__btn calc__btn--num calc__dot">
+            .
+          </button>
         </div>
         <div class="calc__calculate-div">
-          <button class="calc__btn calc__btn--cal calc__delete">DEL</button>
-          <button class="calc__btn calc__btn--cal calc__clearAll">AC</button>
-          <button class="calc__btn calc__btn--cal calc__total">&equals;</button>
+          <button
+            data-calcid="delete"
+            class="calc__btn calc__btn--cal calc__delete"
+          >
+            DEL
+          </button>
+          <button
+            data-calcid="clear"
+            class="calc__btn calc__btn--cal calc__clearAll"
+          >
+            AC
+          </button>
+          <button
+            data-calcid="total"
+            class="calc__btn calc__btn--cal calc__total"
+          >
+            &equals;
+          </button>
         </div>
       </div>
     </div>
