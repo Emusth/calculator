@@ -49,32 +49,107 @@ const listeners = {
 
 // Process input
 const controller = {
-    userInput: '',
+    currentInput: '',
+    currentInputType: '',
+    previousInput: '',
+    previousInputType: '',
+
     convertInput: function(input, source) {
-        let conIn;
-        if(source === 'key') {
-            if(!(Number(input) || Number(input) === 0)) {
-                const loIn = input.toLowerCase();
-                loIn === 'enter' ? conIn = 'total' : 
-                loIn === 'clear' ? conIn = 'clear' :
-                loIn === '=' ? conIn = 'total' :
-                loIn === 'delete' ? conIn = 'delete' :
-                loIn === 'backspace' ? conIn = 'delete' :
-                loIn === '+' ? conIn = 'add' :
-                loIn === '-' ? conIn = 'subtract' :
-                loIn === '*' ? conIn = 'multiply' :
-                loIn === '/' ? conIn = 'divide' :
-                loIn === '.' ? conIn = '.' : 'hm';
-            } 
-        }else {
-            conIn = input;
+        // Determine if it needs to be converted or not
+
+        // Need to convert input that say 'enter' '=' 'clear' 'backspace'
+
+        // Need to disallow any other non-number inputs other than / * - +
+
+        // Need to allow any number inputs 0 1 2 3 4 5 6 7 8 9
+        const originalInput = input;
+        const inputLower= input.toLowerCase();
+        let convertedInput;
+
+        if (inputLower=== '/' || inputLower=== '*' ||inputLower=== '-' ||inputLower=== '+' || inputLower=== 'clear' || inputLower=== 'delete' || inputLower=== '.') {
+            convertedInput = inputLower;
         }
-        this.userInput = conIn;
-        this.determineOutput();
+        else if (inputLower=== 'enter' || inputLower=== '=') {
+            convertedInput = 'total';
+        }
+        else if (inputLower=== 'backspace') {
+            convertedInput = 'delete';
+        } 
+        else if (!isNaN(inputLower) && inputLower !== ' ') {
+            console.log(Number(inputLower));
+            convertedInput = inputLower;
+        } else {
+            return;
+        }
+
+        console.log('conv inp: ', convertedInput);
+
+        // if(convertedInput !== undefined && convertedInput !== ' ') {
+        //         this.setInputs(convertedInput);
+        // } else {
+        //     return;
+        // }
     },
-    determineOutput: function() {
-        console.log('determine: ', this.userInput);
-    }
+
+    setInputs: function(input) {
+        this.previousInput = (this.currentInput ? this.currentInput : '');
+        this.currentInput = input;
+        this.setInputType();
+    },
+
+    setInputType: function() {
+        const curIn = this.currentInput;
+        const prevIn = this.previousInput;
+        console.log(`curIn: ${curIn} prevIn: ${prevIn}`);
+        // Input Scenarios:
+
+        // Possible inputs:
+        // a. Number
+        // b. Operator
+        // c. Decimal
+        // d. Total
+        // e. Del
+        // f. Clear
+        // ?. Nothing input
+
+        // a. Numbers:
+        // Number aft Nothing
+        // Number aft Number
+        // Number aft Operator
+        // Number aft Decimal
+        // Number aft Total
+
+        // b. Operators
+        // Operator aft Nothing
+        // Operator aft Operator
+        // Operator aft Number
+        // Operator aft Decimal
+        // Operator aft Total
+   
+        // c. Decimal
+        // Decimal aft Nothing
+        // Decimal aft Decimal
+        // Decimal aft Number
+        // Decimal aft Operator
+        // Decimal aft Total
+        
+        // d. Total
+        // Total aft Nothing
+        // Total aft Total
+        // Total aft Number
+        // Total aft Operator
+        // Total aft Decimal
+
+        if(Number(curIn)) {
+            this.previousInputType = prevIn ? curIn : '';
+        } else if (curIn === '.') {
+            this.previousInputType = prevIn ? curIn : '';
+        } else if (curIn === '+' || curIn === '-' || curIn === '*' || curIn === '/') {
+            this.previousInputType = prevIn ? curIn : '';
+        } else {
+            this.previousInputType = prevIn ? curIn : '';
+        }
+    },
 }
 
 // Process output
