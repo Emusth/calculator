@@ -38,9 +38,13 @@ body {
         background-color: rgb(49, 42, 42);
         column-gap: .5rem;
     }
+
     &__display-input, &__display-total {
         font-size: 28px;
         color: rgb(223, 206, 206);
+    }
+    &__display-input{
+        margin-right: 2rem;
     }
     &__display-total{
         font-weight: bold;

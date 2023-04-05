@@ -8,12 +8,226 @@ const listeners = {
         document.body.addEventListener('keydown', that.keyEvent);
     },
     calcClickEvent: function(e) {
-        inputs.approveInput(e.target.dataset.calcid, 'click');
+        inputs.controller(e.target.dataset.calcid);
     },
     keyEvent: function(e) {
-        inputs.approveInput(e.key, 'key');
+        inputs.controller(e.key);
     }
 }
+
+const inputs = {
+    currentInput: '',
+    currentInputType: '',
+    approvedInputsArr: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '=', '+', '-', '*', '/', 'Clear', 'Delete',  'Enter'],
+    firstNumArr: [],
+    operatorArr: [],
+    secondNumArr: [],
+    total: '',
+
+    controller(input) {
+        this.approveInput(input);
+        this.inputType();
+        const path = this.inputPath();
+        
+        if(path === 'arr') {
+            this.moveToArr();
+        }
+        else if (path === 'clear') {
+            this.clearInputs();
+        }
+        else if (path === 'total') {
+            this.total = this.totalInputs();
+            
+        }
+
+        if (this.total) {
+           this.totalController();
+        } else {
+            
+            output.setDisplayVars(this.firstNumArr.join(''),this.operatorArr.join(''),this.secondNumArr.join(''));
+            output.updateDisplay();     
+        }
+    },
+    totalController() {
+        const totalSave = this.total;
+        output.setDisplayVars('','','');
+        output.updateDisplay(this.total);
+        this.clearInputs();
+        this.firstNumArr.push(totalSave);
+    },
+
+    // Approve input in general
+    approveInput(input) {
+        if(this.approvedInputsArr.includes(input)) {
+            this.currentInput = input;
+            return;
+        }
+    },
+
+    // See if the input was a number, decimal, operator, total, or clear/delete
+    inputType() {
+        const input = this.currentInput;
+        const numberArr = ['1', '2','3','4','5','6','7','8','9','0'];
+        const decimalArr = ['.'];
+        const operatorArr = ['+', '-','*','/'];
+        
+        if(numberArr.includes(input)) {
+            this.currentInputType = 'number';
+        } else if (decimalArr.includes(input)) {
+            this.currentInputType = 'decimal';
+        } else if (operatorArr.includes(input)) {
+            this.currentInputType = 'operator';
+        } else if (input === 'Total' || input === '=' || input === 'Enter') {
+            this.currentInputType = 'total';
+        } else if (input === 'Clear' || input === 'Delete') {
+            this.currentInputType = 'clear';
+        }
+        return;
+    },
+
+    inputPath() {
+        let inputType = this.currentInputType;
+        if(inputType === 'number' || inputType === 'decimal' || (inputType === 'operator' && !this.secondNumArr.length)) {
+            return 'arr';
+        } 
+        else if (inputType === 'clear'){
+            return 'clear';
+        } 
+        else if (inputType === 'total' || (inputType === 'operator' && this.secondNumArr.length)) {
+            return 'total';
+        }
+    },
+
+    moveToArr() {
+        const input = this.currentInput;
+        const inputType = this.currentInputType;
+
+        const fArr = this.firstNumArr;
+        const sArr = this.secondNumArr;
+        const opArr = this.operatorArr;
+        const acceptOpArr = ['+','-','/','*']
+        
+        // There are no previous inputs, use first array
+        // There is an input in first array, but nothing in the operator array, and the current input is not an operator
+        if(!fArr.length || 
+            (fArr.length && 
+                !opArr.length && !acceptOpArr.includes(input))) 
+            {
+                    if (this.numArrCheck('first')) {
+                        this.firstNumArr.push(input);
+                    } else {
+                        return;
+                    };
+            }
+        else if ((fArr.length && 
+            !opArr.length && 
+            (acceptOpArr.includes(input)))) 
+            {
+                if (this.operatorArrCheck()) {
+                    this.operatorArr.push(input);
+                } else {
+                    return;
+                };
+            }
+        else if (fArr.length && opArr.length && !sArr.length || fArr.length && opArr.length && !acceptOpArr.includes(input)) 
+            {
+                if (this.numArrCheck('second')) {
+                    this.secondNumArr.push(input);
+                } else {
+                    return;
+                };
+            }
+
+    },
+
+    numArrCheck(arrTarget){
+        const curInput = this.currentInput;
+
+        const numArr = arrTarget === 'first' ? this.firstNumArr : this.secondNumArr;
+        const numArrLength = numArr.length;
+
+        const approvedInputs = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+        
+        if (numArrLength === 0) {
+            approvedInputs.push('+', '-', '.');
+        } else if (numArrLength > 0 && !numArr.includes('.')) {
+            approvedInputs.push('.');
+        }
+        if (approvedInputs.includes(curInput)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    },
+    operatorArrCheck(){
+        const curInput = this.currentInput;
+        const approvedInputs = ['+', '-','*', '/'];
+        if (approvedInputs.includes(curInput)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    },
+    clearInputs(){
+        this.firstNumArr.length = 0;
+        this.operatorArr.length = 0;
+        this.secondNumArr.length = 0;
+        this.total = '';
+    },
+    totalInputs(){
+        fNum = Number(this.firstNumArr.join(''));
+        sNum = Number(this.secondNumArr.join(''));
+        op = this.operatorArr[0];
+        
+       if ( op === '+') {
+            total = fNum + sNum;
+        }
+        else if (op === '-') {
+            total = fNum - sNum;
+        }
+        else if (op === '*') {
+            total = fNum * sNum;
+        }
+        else if (op === '/') {
+            total = fNum / sNum;
+        }
+
+        return Math.round(total * 1000) / 1000
+        
+    },
+}
+
+const output = {
+    
+    inputDisplay: document.querySelector('.calc__display-input'),
+    totalDisplay: document.querySelector('.calc__display-total'),
+    firstNum: '',
+    operator: '',
+    secondNum: '',
+    total: '',
+    setDisplayVars(firstNum, operator, secondNum){
+        this.firstNum = firstNum;
+        this.operator = operator;
+        this.secondNum = secondNum;
+        
+    },
+
+    updateDisplay(total = '') {
+        const inputString = this.firstNum + (this.operator ? (' ' + this.operator) : '') + (this.secondNum ? (' ' + this.secondNum) : '');
+        this.inputDisplay.textContent = this.firstNum ? inputString : total ? '' : '0';
+
+        this.totalDisplay.textContent = total;
+    },
+}
+
+
+listeners.setListener();
+
+
+
+
 
 // Process input
 // const controller = {
@@ -41,7 +255,7 @@ const listeners = {
 //             convertedInput = 'delete';
 //         } 
 //         else if (!isNaN(inputLower) && inputLower !== ' ') {
-//             console.log(Number(inputLower));
+//             
 //             convertedInput = inputLower;
 //         } else {
 //             return;
@@ -62,7 +276,7 @@ const listeners = {
 
 //         let type;
 
-//         // console.log(`curIn: ${curIn} prevIn: ${prevIn}`);
+//         // 
 
 //         // if(!isNaN(curIn)) {
 //         // type = 'number';
@@ -204,7 +418,7 @@ const listeners = {
 //     validateNumInput: function(input, num) {
 //         if(typeof(Number(input)) === 'number' || input === '-' || input === '+' || input === '.') {
 //             this.firstNum = num.concat(input);
-//             console.log('this.firstNum: ', this.firstNum);
+//             
 //         }
 //     }
 // }
@@ -275,125 +489,3 @@ const listeners = {
 // Step 5. Handle a clear: Clear all arrays and displays
 
 // Step 6. Handle a total: If totalling is not possible yet, maybe due to missing info, nothing happens. If There's enough, create a total rounding to the nearest hundredth.
-
-
-const inputs = {
-    currentInput: '',
-    currentInputType: '',
-    approvedInputsArr: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '=', '+', '-', '*', '/', 'Clear', 'Delete',  'Enter'],
-    firstNumArr: [],
-    operatorArr: [],
-    secondNumArr: [],
-
-    // Approve input in general
-    approveInput(input) {
-        if(this.approvedInputsArr.includes(input)) {
-            this.currentInput = input;
-            this.inputType();
-        }
-    },
-
-    // See if the input was a number, decimal, operator, total, or clear/delete
-    inputType() {
-        const input = this.currentInput;
-        const numberArr = ['1', '2','3','4','5','6','7','8','9','0'];
-        const decimalArr = ['.'];
-        const operatorArr = ['+', '-','*','/'];
-        
-        if(numberArr.includes(input)) {
-            this.currentInputType = 'number';
-        } else if (decimalArr.includes(input)) {
-            this.currentInputType = 'decimal';
-        } else if (operatorArr.includes(input)) {
-            this.currentInputType = 'operator';
-        } else if (input === 'Total' || input === '=' || input === 'Enter') {
-            this.currentInputType = 'total';
-        } else if (input === 'Clear' || input === 'Delete') {
-            this.currentInputType = 'clear';
-        }
-
-        this.inputPath();
-    },
-
-    inputPath() {
-        let inputType = this.currentInputType;
-        if(inputType === 'number' || inputType === 'decimal' || inputType === 'operator') {
-            this.moveToArr();
-        } 
-        else if (inputType === 'clear'){
-            this.clearInputs();
-        } 
-        else if (inputType === 'total') {
-            this.totalInputs();
-        }
-    },
-
-    moveToArr() {
-        const input = this.currentInput;
-        const inputType = this.currentInputType;
-
-        const fArr = this.firstNumArr;
-        const sArr = this.secondNumArr;
-        const opArr = this.operatorArr;
-        
-        // There are no previous inputs, use first array
-        // There is an input in first array, but nothing in the operator array, and the current input is not an operator
-        if(!fArr.length || 
-            (fArr.length && 
-                !opArr.length && 
-                input !== '+' && 
-                input !== '-' && 
-                input !== '*' && 
-                input !== '/')) 
-            {
-                    if (this.firstArrCheck()) {
-                        this.firstNumArr.push(input);
-                    } else {
-                        return;
-                    };
-            }
-            else if ((fArr.length && 
-            !opArr.length && 
-            input === '+' || 
-            input === '-' || 
-            input === '*' || 
-            input === '/')) 
-            {
-                if (this.operatorArrCheck()) {
-                    this.operatorArr.push(input);
-                } else {
-                    return;
-                };
-            }
-            else if (fArr.length && opArr.length) 
-            {
-                if (this.secondArrCheck()) {
-                    this.secondNumArr.push(input);
-                } else {
-                    return;
-                };
-            }
-
-        // Else if firstArr ISNT empty, AND opArr ISNT empty, choose secondArr
-    },
-
-    firstArrCheck(){
-        // If there is no length, accept +, -, numbers, decimals
-        // If there is length and no other decimals, accept numbers and decimals
-        // If there is length and decimal, accept only numbers
-    },
-    operatorArrCheck(){
-        // Accept only - + / *
-    },
-    secondArrCheck(){
-        // If there is no length, accept +, -, numbers, decimals
-        // If there is length and no other decimals, accept numbers and decimals
-        // If there is length and decimal, accept only numbers
-    },
-
-    clearInputs(){},
-
-    totalInputs(){},
-}
-
-listeners.setListener();

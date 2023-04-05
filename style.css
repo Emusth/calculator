@@ -33,6 +33,9 @@ body {
   font-size: 28px;
   color: rgb(223, 206, 206);
 }
+.calc__display-input {
+  margin-right: 2rem;
+}
 .calc__display-total {
   font-weight: bold;
 }
